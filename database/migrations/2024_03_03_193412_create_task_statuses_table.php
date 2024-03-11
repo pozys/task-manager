@@ -12,7 +12,9 @@ return new class extends Migration
     {
         Schema::create(self::TABLE, function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name')
+                ->unique()
+                ->comment('Название статуса');
             $table->timestamps();
             $table->softDeletes();
         });
