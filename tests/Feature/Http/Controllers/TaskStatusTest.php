@@ -18,7 +18,7 @@ class TaskStatusTest extends ControllerTestCase
         $response = $this->get(route('task_statuses.index'));
         $response->assertOk();
         $response->assertSee(__('task-status.index.id'));
-        $response->assertSee(__('task-status.index.name'));
+        $response->assertSee(__('task-status.name'));
         $response->assertSee(__('task-status.index.created_at'));
     }
 
