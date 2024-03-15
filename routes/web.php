@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\{HomeController, ProfileController, TaskStatusController};
+use App\Http\Controllers\{HomeController, ProfileController, TaskController, TaskStatusController};
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 
+Route::resource('/tasks', TaskController::class);
 Route::resource('/task_statuses', TaskStatusController::class)->except(['show']);
 
 Route::middleware('auth')->group(function () {
