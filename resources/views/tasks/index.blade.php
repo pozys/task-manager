@@ -17,12 +17,12 @@
                 <table class="mt-4">
                     <thead class="border-b-2 border-solid border-black text-left">
                         <tr>
-                            <th>{{ __('task.index.id') }}</th>
-                            <th>{{ __('task.index.status') }}</th>
-                            <th>{{ __('task.index.name') }}</th>
-                            <th>{{ __('task.index.created_by') }}</th>
-                            <th>{{ __('task.index.assigned_to') }}</th>
-                            <th>{{ __('task.index.created_at') }}</th>
+                            <th>{{ __('task.id') }}</th>
+                            <th>{{ __('task.status') }}</th>
+                            <th>{{ __('task.name') }}</th>
+                            <th>{{ __('task.created_by') }}</th>
+                            <th>{{ __('task.assigned_to') }}</th>
+                            <th>{{ __('task.created_at') }}</th>
                             <th>{{ __('task.index.actions') }}</th>
                         </tr>
                     </thead>
@@ -50,7 +50,9 @@
                         @endforeach
                     </tbody>
                 </table>
-                {{ $tasks->links() }}
+                <div class="mt-4">
+                    {{ $tasks->links() }}
+                </div>
             </div>
         </div>
     </section>
