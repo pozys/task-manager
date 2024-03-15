@@ -14,9 +14,15 @@ class Task extends Model
     protected $fillable = [
         'name',
         'description',
-        'status_id',
+        'task_status_id',
         'created_by_id',
         'assigned_to_id',
+    ];
+
+    protected $with = [
+        'status',
+        'author',
+        'assignee',
     ];
 
     public function author(): BelongsTo
@@ -31,6 +37,6 @@ class Task extends Model
 
     public function status(): BelongsTo
     {
-        return $this->belongsTo(TaskStatus::class, 'status_id');
+        return $this->belongsTo(TaskStatus::class, 'task_status_id');
     }
 }

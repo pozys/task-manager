@@ -10,9 +10,9 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
+            'name' => $this->faker->text(50),
             'description' => $this->faker->text,
-            'status_id' => TaskStatus::inRandomOrder()->first()->id,
+            'task_status_id' => TaskStatus::inRandomOrder()->first()->id,
             'created_by_id' => User::inRandomOrder()->first()->id,
             'assigned_to_id' => User::inRandomOrder()->first()->id,
         ];
