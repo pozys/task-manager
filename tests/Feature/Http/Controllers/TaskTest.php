@@ -17,12 +17,12 @@ class TaskTest extends ControllerTestCase
     {
         $response = $this->get(route('tasks.index'));
         $response->assertOk();
-        $response->assertSee(__('task.index.id'));
-        $response->assertSee(__('task.index.status'));
-        $response->assertSee(__('task.index.name'));
-        $response->assertSee(__('task.index.created_by'));
-        $response->assertSee(__('task.index.assigned_to'));
-        $response->assertSee(__('task.index.created_at'));
+        $response->assertSee(__('task.id'));
+        $response->assertSee(__('task.status'));
+        $response->assertSee(__('task.name'));
+        $response->assertSee(__('task.created_by'));
+        $response->assertSee(__('task.assigned_to'));
+        $response->assertSee(__('task.created_at'));
         $response->assertSee(__('task.index.actions'));
     }
 
@@ -68,6 +68,8 @@ class TaskTest extends ControllerTestCase
 
     private function createTask(): Task
     {
-        return Task::factory()->create();
+        return Task::factory()->create([
+            'created_by_id' => $this->user->id,
+        ]);
     }
 }
