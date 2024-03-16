@@ -59,7 +59,11 @@ class TaskStatusController extends Controller
 
     public function destroy(TaskStatus $taskStatus): RedirectResponse
     {
-        if ($taskStatus->delete()) {
+        $taskStatus->loadCount('tasks');
+
+        if ($taskStatus->tasks_count > 0) {
+            flash()->error(__('layout.flash.task_status.delete_error'));
+        } elseif ($taskStatus->delete()) {
             flash()->success(__('layout.flash.task_status.deleted'));
         } else {
             flash()->error(__('layout.flash.error'));
