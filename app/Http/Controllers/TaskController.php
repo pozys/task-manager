@@ -68,6 +68,12 @@ class TaskController extends Controller
 
     public function destroy(Task $task): RedirectResponse
     {
-        //
+        if ($task->delete()) {
+            flash()->success(__('layout.flash.task.deleted'));
+        } else {
+            flash()->error(__('layout.flash.error'));
+        }
+
+        return redirect()->route('tasks.index');
     }
 }

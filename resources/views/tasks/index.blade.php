@@ -40,7 +40,7 @@
                             <td>{{ $task->assignee->name }}</td>
                             <td>{{ $task->created_at->format('d.m.Y') }}</td>
                             <td>
-                                <a data-confirm="{{ __('task-status.index.sure') }}" data-method="delete"
+                                <a data-confirm="{{ __('task.index.sure') }}" data-method="delete"
                                     href="{{ route('tasks.destroy', $task) }}" class="text-red-600 hover:text-red-900">
                                     {{ __('task.index.delete') }} </a>
                                 <a href="{{ route('tasks.edit', $task) }}" class="text-blue-600 hover:text-blue-900">
