@@ -47,15 +47,26 @@ class TaskController extends Controller
 
     public function edit(Task $task): View
     {
-        //
+        $taskStatuses = TaskStatus::all()->pluck('name', 'id')->sortKeys();
+        $assignees = User::all()->pluck('name', 'id')->sort();
+
+        return view('tasks.edit', compact('task', 'taskStatuses', 'assignees'));
     }
 
-    public function update(TaskRequest $request, Task $task)
+    public function update(TaskRequest $request, Task $task): RedirectResponse
     {
-        //
+        $task = $task->fill($request->validated());
+
+        if ($task->save()) {
+            flash()->success(__('layout.flash.task.updated'));
+        } else {
+            flash()->error(__('layout.flash.error'));
+        }
+
+        return redirect()->route('tasks.index');
     }
 
-    public function destroy(Task $task)
+    public function destroy(Task $task): RedirectResponse
     {
         //
     }
