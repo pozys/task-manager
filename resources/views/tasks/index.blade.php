@@ -6,6 +6,7 @@
                 @include('flash::message')
                 <h1 class="mb-5">{{ __('task.index.title') }}</h1>
 
+                @can('create', App\Models\Task::class)
                 <div class="w-full flex items-center">
                     <div class="ml-auto">
                         <a href="{{ route('tasks.create') }}"
@@ -13,6 +14,7 @@
                             {{ __('task.index.create') }}</a>
                     </div>
                 </div>
+                @endcan
 
                 <table class="mt-4">
                     <thead class="border-b-2 border-solid border-black text-left">
@@ -40,11 +42,15 @@
                             <td>{{ $task->assignee->name }}</td>
                             <td>{{ $task->created_at->format('d.m.Y') }}</td>
                             <td>
+                                @can('delete', $task)
                                 <a data-confirm="{{ __('task.index.sure') }}" data-method="delete"
                                     href="{{ route('tasks.destroy', $task) }}" class="text-red-600 hover:text-red-900">
                                     {{ __('task.index.delete') }} </a>
+                                @endcan
+                                @can('update', $task)
                                 <a href="{{ route('tasks.edit', $task) }}" class="text-blue-600 hover:text-blue-900">
                                     {{ __('task.index.update') }} </a>
+                                @endcan
                             </td>
                         </tr>
                         @endforeach
