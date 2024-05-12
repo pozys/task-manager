@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\TaskStatus\TaskStatusInUseException;
 use App\Http\Requests\TaskStatusRequest;
 use App\Models\TaskStatus;
 use Illuminate\Contracts\View\View;
@@ -59,13 +60,12 @@ class TaskStatusController extends Controller
 
     public function destroy(TaskStatus $taskStatus): RedirectResponse
     {
-        $taskStatus->loadCount('tasks');
-
-        if ($taskStatus->tasks_count > 0) {
-            flash()->error(__('layout.flash.task_status.delete_error'));
-        } elseif ($taskStatus->delete()) {
+        try {
+            $taskStatus->delete();
             flash()->success(__('layout.flash.task_status.deleted'));
-        } else {
+        } catch (TaskStatusInUseException $th) {
+            flash()->error(__('layout.flash.task_status.delete_error'));
+        } catch (\Exception $th) {
             flash()->error(__('layout.flash.error'));
         }
 
