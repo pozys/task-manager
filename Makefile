@@ -1,7 +1,7 @@
 PORT ?= 8000
 
-up:
-	docker compose up -d
+console:
+	docker exec -it application php artisan tinker
 
 build:
 	docker compose build
@@ -42,3 +42,6 @@ env-prepare:
 
 key:
 	php artisan key:generate
+
+test:
+	php artisan test
