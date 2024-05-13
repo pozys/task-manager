@@ -17,19 +17,21 @@ class TaskStatusTest extends ControllerTestCase
     {
         $response = $this->get(route('task_statuses.index'));
         $response->assertOk();
-        $response->assertSee(__('task-status.index.id'));
+        $response->assertSee(__('task-status.id'));
         $response->assertSee(__('task-status.name'));
-        $response->assertSee(__('task-status.index.created_at'));
+        $response->assertSee(__('task-status.created_at'));
     }
 
     public function testCreate(): void
     {
-        $status = TaskStatus::factory()->make();
-        $statusData = $status->only(['name']);
+        $statusData = [
+            'name' => 'Test Status',
+        ];
+
         $response = $this->post(route('task_statuses.store'), $statusData);
 
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
+        $response->assertRedirectToRoute('task_statuses.index');
 
         $this->assertDatabaseHas('task_statuses', $statusData);
     }
@@ -42,7 +44,7 @@ class TaskStatusTest extends ControllerTestCase
         $response = $this->put(route('task_statuses.update', ['task_status' => $status]), $statusParams);
 
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
+        $response->assertRedirectToRoute('task_statuses.index');
 
         $this->assertDatabaseHas('task_statuses', array_merge(['id' => $status->id], $statusParams));
     }
@@ -56,7 +58,7 @@ class TaskStatusTest extends ControllerTestCase
         );
 
         $response->assertSessionDoesntHaveErrors();
-        $response->assertRedirect();
+        $response->assertRedirectToRoute('task_statuses.index');
 
         $this->assertSoftDeleted($status);
     }
