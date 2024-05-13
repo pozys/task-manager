@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TaskStatus;
 use Tests\ControllerTestCase;
 
 class TaskTest extends ControllerTestCase
@@ -13,6 +14,7 @@ class TaskTest extends ControllerTestCase
 
         $this->actingAs($this->user);
     }
+
     public function testIndex(): void
     {
         $response = $this->get(route('tasks.index'));
@@ -28,12 +30,17 @@ class TaskTest extends ControllerTestCase
 
     public function testCreate(): void
     {
-        $task = Task::factory()->make();
-        $taskData = $task->only($task->getFillable());
+        $taskData = [
+            'name' => 'Test Task',
+            'description' => 'This is a test task',
+            'task_status_id' => TaskStatus::factory()->create()->id,
+            'assigned_to_id' => $this->user->id,
+        ];
+
         $response = $this->post(route('tasks.store'), $taskData);
 
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
+        $response->assertRedirectToRoute('tasks.index');
 
         $this->assertDatabaseHas('tasks', $taskData);
     }
@@ -47,7 +54,7 @@ class TaskTest extends ControllerTestCase
         $response = $this->put(route('tasks.update', compact('task')), $taskParams);
 
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect();
+        $response->assertRedirectToRoute('tasks.index');
 
         $this->assertDatabaseHas('tasks', array_merge(['id' => $task->id], $taskParams));
     }
@@ -61,7 +68,7 @@ class TaskTest extends ControllerTestCase
         );
 
         $response->assertSessionDoesntHaveErrors();
-        $response->assertRedirect();
+        $response->assertRedirectToRoute('tasks.index');
 
         $this->assertSoftDeleted($task);
     }
