@@ -17,9 +17,9 @@
                 <table class="mt-4">
                     <thead class="border-b-2 border-solid border-black text-left">
                         <tr>
-                            <th>{{ __('task-status.index.id') }}</th>
+                            <th>{{ __('task-status.id') }}</th>
                             <th>{{ __('task-status.name') }}</th>
-                            <th>{{ __('task-status.index.created_at') }}</th>
+                            <th>{{ __('task-status.created_at') }}</th>
                             <th>{{ __('task-status.index.actions') }}</th>
                         </tr>
                     </thead>
