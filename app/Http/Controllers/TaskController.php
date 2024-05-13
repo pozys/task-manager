@@ -33,7 +33,6 @@ class TaskController extends Controller
     public function store(TaskRequest $request): RedirectResponse
     {
         $task = new Task($request->validated());
-        $task->author()->associate(Auth::user());
         $task->save();
 
         if ($task) {

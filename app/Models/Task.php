@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany};
+use Illuminate\Support\Facades\Auth;
 
 class Task extends Model
 {
@@ -22,6 +23,7 @@ class Task extends Model
         'status',
         'author',
         'assignee',
+        'labels',
     ];
 
     public function author(): BelongsTo
@@ -37,5 +39,17 @@ class Task extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(TaskStatus::class, 'task_status_id');
+    }
+
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (Task $task) {
+            $task->author()->associate(Auth::user());
+        });
     }
 }
