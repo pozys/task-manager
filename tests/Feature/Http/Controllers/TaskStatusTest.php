@@ -24,6 +24,13 @@ class TaskStatusTest extends ControllerTestCase
 
     public function testCreate(): void
     {
+        $response = $this->get(route('task_statuses.create'));
+
+        $response->assertOk();
+    }
+
+    public function testStore(): void
+    {
         $statusData = [
             'name' => 'Test Status',
         ];
@@ -34,6 +41,15 @@ class TaskStatusTest extends ControllerTestCase
         $response->assertRedirectToRoute('task_statuses.index');
 
         $this->assertDatabaseHas('task_statuses', $statusData);
+    }
+
+    public function testEdit(): void
+    {
+        $status = $this->createStatus();
+
+        $response = $this->get(route('task_statuses.edit', $status));
+
+        $response->assertOk();
     }
 
     public function testUpdate(): void
@@ -59,8 +75,18 @@ class TaskStatusTest extends ControllerTestCase
 
         $response->assertSessionDoesntHaveErrors();
         $response->assertRedirectToRoute('task_statuses.index');
-
         $this->assertSoftDeleted($status);
+    }
+
+    public function testDestroyDeniedWhenUsedByTask(): void
+    {
+        $status = TaskStatus::factory()
+            ->hasTasks(1)
+            ->create();
+
+        $response = $this->delete(route('task_statuses.destroy', ['task_status' => $status->id]));
+        $response->assertRedirectToRoute('task_statuses.index');
+        $this->assertNotSoftDeleted($status);
     }
 
     private function createStatus(): TaskStatus
