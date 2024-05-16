@@ -18,6 +18,7 @@ return new class extends Migration
                 ->nullable()
                 ->comment('Описание метки');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
