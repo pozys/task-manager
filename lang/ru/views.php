@@ -8,5 +8,8 @@ return [
         'assignee' => [
             'placeholder' => '----------',
         ],
+        'labels' => [
+            'placeholder' => '',
+        ],
     ],
 ];
