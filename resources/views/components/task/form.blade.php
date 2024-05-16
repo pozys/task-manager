@@ -44,7 +44,18 @@
             <x-forms.validation :$message />
             @enderror
         </div>
-
+        <div class="mt-2">
+            {{ html()->label( __('task.tags'), 'labels') }}
+        </div>
+        <div>
+            {{ html()->select('labels[]', $labels)
+            ->placeholder(__('views.task.labels.placeholder'))
+            ->class('rounded border-gray-300 w-1/3')
+            ->attribute('multiple', 'multiple') }}
+            @error('labels')
+            <x-forms.validation :$message />
+            @enderror
+        </div>
         <div class="mt-2">
             {{ $submit }}
         </div>

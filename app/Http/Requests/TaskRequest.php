@@ -19,6 +19,8 @@ class TaskRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'task_status_id' => ['required', 'integer', Rule::exists('task_statuses', 'id')],
             'assigned_to_id' => ['nullable', 'integer', Rule::exists('users', 'id')],
+            'labels' => ['nullable', 'array'],
+            'labels.*' => ['nullable', 'integer', Rule::exists('labels', 'id')],
         ];
     }
 }

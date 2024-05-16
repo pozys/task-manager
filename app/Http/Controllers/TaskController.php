@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
-use App\Models\{Task, TaskStatus, User};
+use App\Models\{Label, Task, TaskStatus, User};
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
@@ -26,8 +25,9 @@ class TaskController extends Controller
     {
         $taskStatuses = TaskStatus::all()->pluck('name', 'id')->sortKeys();
         $assignees = User::all()->pluck('name', 'id')->sort();
+        $labels = Label::all()->pluck('name', 'id')->sort();
 
-        return view('tasks.create', compact('taskStatuses', 'assignees'));
+        return view('tasks.create', compact('taskStatuses', 'assignees', 'labels'));
     }
 
     public function store(TaskRequest $request): RedirectResponse
@@ -53,8 +53,9 @@ class TaskController extends Controller
     {
         $taskStatuses = TaskStatus::all()->pluck('name', 'id')->sortKeys();
         $assignees = User::all()->pluck('name', 'id')->sort();
+        $labels = Label::all()->pluck('name', 'id')->sort();
 
-        return view('tasks.edit', compact('task', 'taskStatuses', 'assignees'));
+        return view('tasks.edit', compact('task', 'taskStatuses', 'assignees', 'labels'));
     }
 
     public function update(TaskRequest $request, Task $task): RedirectResponse
