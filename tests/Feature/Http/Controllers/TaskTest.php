@@ -2,8 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Models\Task;
-use App\Models\TaskStatus;
+use App\Models\{Task, TaskStatus};
 use Tests\ControllerTestCase;
 
 class TaskTest extends ControllerTestCase
@@ -30,6 +29,13 @@ class TaskTest extends ControllerTestCase
 
     public function testCreate(): void
     {
+        $response = $this->get(route('tasks.create'));
+
+        $response->assertOk();
+    }
+
+    public function testStore(): void
+    {
         $taskData = [
             'name' => 'Test Task',
             'description' => 'This is a test task',
@@ -43,6 +49,15 @@ class TaskTest extends ControllerTestCase
         $response->assertRedirectToRoute('tasks.index');
 
         $this->assertDatabaseHas('tasks', $taskData);
+    }
+
+    public function testEdit(): void
+    {
+        $task = $this->createTask();
+
+        $response = $this->get(route('tasks.edit', $task));
+
+        $response->assertOk();
     }
 
     public function testUpdate(): void
