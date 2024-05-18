@@ -14,10 +14,10 @@ class TaskDTO
     {
         return new self(
             $request->name,
-            $request->task_status_id,
+            (int) $request->task_status_id,
             $request->description,
-            $request->assigned_to_id,
-            $request->labels
+            (int) $request->assigned_to_id,
+            array_map('intval', $request->labels),
         );
     }
 
