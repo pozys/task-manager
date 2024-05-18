@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\DTO\Task\TaskDTO;
 use App\Http\Requests\TaskRequest;
 use App\Models\{Label, Task, TaskStatus, User};
+use App\Services\TaskManager;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 
 class TaskController extends Controller
 {
-    public function __construct()
+    public function __construct(private TaskManager $taskManager)
     {
         $this->authorizeResource(Task::class, 'task');
     }
@@ -34,8 +36,9 @@ class TaskController extends Controller
 
     public function store(TaskRequest $request): RedirectResponse
     {
-        $task = new Task($request->validated());
-        $task->save();
+        $taskDTO = TaskDTO::fromRequest($request);
+
+        $task = $this->taskManager->create($taskDTO);
 
         if ($task) {
             flash()->success(__('layout.flash.task.created'));
@@ -62,7 +65,9 @@ class TaskController extends Controller
 
     public function update(TaskRequest $request, Task $task): RedirectResponse
     {
-        $task = $task->fill($request->validated());
+        $taskDTO = TaskDTO::fromRequest($request);
+
+        $task = $this->taskManager->update($task, $taskDTO);
 
         if ($task->save()) {
             flash()->success(__('layout.flash.task.updated'));
