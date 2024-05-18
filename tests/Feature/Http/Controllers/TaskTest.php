@@ -2,7 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Models\{Task, TaskStatus};
+use App\Models\{Label, Task, TaskStatus};
+use Illuminate\Support\Arr;
 use Tests\ControllerTestCase;
 
 class TaskTest extends ControllerTestCase
@@ -36,11 +37,15 @@ class TaskTest extends ControllerTestCase
 
     public function testStore(): void
     {
+        $expectedLabelsCount = 3;
+        $labels = Label::factory($expectedLabelsCount)->create();
+
         $taskData = [
             'name' => 'Test Task',
             'description' => 'This is a test task',
             'task_status_id' => TaskStatus::factory()->create()->id,
             'assigned_to_id' => $this->user->id,
+            'labels' => $labels->pluck('id')->all(),
         ];
 
         $response = $this->post(route('tasks.store'), $taskData);
@@ -48,7 +53,8 @@ class TaskTest extends ControllerTestCase
         $response->assertSessionHasNoErrors();
         $response->assertRedirectToRoute('tasks.index');
 
-        $this->assertDatabaseHas('tasks', $taskData);
+        $this->assertDatabaseHas('tasks', Arr::except($taskData, 'labels'));
+        $this->assertDatabaseCount('label_task', $expectedLabelsCount);
     }
 
     public function testEdit(): void
@@ -62,16 +68,23 @@ class TaskTest extends ControllerTestCase
 
     public function testUpdate(): void
     {
-        $task = $this->createTask();
+        $task = $this->createTask(3);
         $taskParams = $task->only($task->getFillable());
         $taskParams['name'] = $this->faker->name;
+
+        $expectedLabelsCount = 2;
+        $labels = Label::factory($expectedLabelsCount)->create();
+
+        $taskParams['labels'] = $labels->pluck('id')->all();
 
         $response = $this->put(route('tasks.update', compact('task')), $taskParams);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirectToRoute('tasks.index');
 
-        $this->assertDatabaseHas('tasks', array_merge(['id' => $task->id], $taskParams));
+        $this->assertDatabaseHas('tasks', array_merge(['id' => $task->id], Arr::except($taskParams, 'labels')));
+
+        $this->assertCount($expectedLabelsCount, $task->labels);
     }
 
     public function testDestroy(): void
@@ -88,10 +101,12 @@ class TaskTest extends ControllerTestCase
         $this->assertSoftDeleted($task);
     }
 
-    private function createTask(): Task
+    private function createTask(int $labelsCount = 0): Task
     {
-        return Task::factory()->create([
-            'created_by_id' => $this->user->id,
-        ]);
+        return Task::factory()
+            ->hasLabels($labelsCount)
+            ->create([
+                'created_by_id' => $this->user->id,
+            ]);
     }
 }
