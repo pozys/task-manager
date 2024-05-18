@@ -29,9 +29,9 @@ class TaskController extends Controller
     {
         $taskStatuses = TaskStatus::all()->pluck('name', 'id')->sortKeys();
         $assignees = User::all()->pluck('name', 'id')->sort();
-        $labels = Label::all()->pluck('name', 'id')->sort();
+        $availableLabels = Label::all()->pluck('name', 'id')->sort();
 
-        return view('tasks.create', compact('taskStatuses', 'assignees', 'labels'));
+        return view('tasks.create', compact('taskStatuses', 'assignees', 'availableLabels'));
     }
 
     public function store(TaskRequest $request): RedirectResponse
@@ -58,9 +58,16 @@ class TaskController extends Controller
     {
         $taskStatuses = TaskStatus::all()->pluck('name', 'id')->sortKeys();
         $assignees = User::all()->pluck('name', 'id')->sort();
-        $labels = Label::all()->pluck('name', 'id')->sort();
+        $availableLabels = Label::all()->pluck('name', 'id')->sort();
+        $selectedLabels = $task->labels->pluck('id');
 
-        return view('tasks.edit', compact('task', 'taskStatuses', 'assignees', 'labels'));
+        return view('tasks.edit', [
+            'task' => $task,
+            'taskStatuses' => $taskStatuses,
+            'assignees' => $assignees,
+            'availableLabels' => $availableLabels,
+            'selectedLabels' => $selectedLabels,
+        ]);
     }
 
     public function update(TaskRequest $request, Task $task): RedirectResponse

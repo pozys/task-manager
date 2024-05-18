@@ -101,6 +101,17 @@ class TaskTest extends ControllerTestCase
         $this->assertSoftDeleted($task);
     }
 
+    public function testUnsetLabels(): void
+    {
+        $task = $this->createTask(3);
+        $taskParams = $task->only($task->getFillable());
+        $taskParams['labels'] = [null];
+
+        $response = $this->put(route('tasks.update', compact('task')), $taskParams);
+
+        $this->assertCount(0, $task->labels);
+    }
+
     private function createTask(int $labelsCount = 0): Task
     {
         return Task::factory()

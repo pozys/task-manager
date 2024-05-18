@@ -1,5 +1,5 @@
 <x-task.form method='PUT' :action="route('tasks.update', $task)" :title="__('task.edit.title')" :$task :$taskStatuses
-    :$assignees :$labels>
+    :$assignees :$availableLabels :$selectedLabels>
     <x-slot:submit>
         <x-forms.submit :text="__('task.edit.submit')" />
         </x-slot>

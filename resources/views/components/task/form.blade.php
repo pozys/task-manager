@@ -48,10 +48,13 @@
             {{ html()->label( __('task.tags'), 'labels') }}
         </div>
         <div>
-            {{ html()->select('labels[]', $labels)
+
+            {{ html()->select('labels[]', $availableLabels)
+            ->attributes(['multiple'=> 'multiple', 'id' => 'labels'])
             ->placeholder(__('views.task.labels.placeholder'))
             ->class('rounded border-gray-300 w-1/3')
-            ->attribute('multiple', 'multiple') }}
+            ->value($selectedLabels ?? [])
+            }}
             @error('labels')
             <x-forms.validation :$message />
             @enderror
