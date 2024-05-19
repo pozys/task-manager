@@ -51,7 +51,10 @@ class TaskController extends Controller
 
     public function show(Task $task): View
     {
-        return view('tasks.show', compact('task'));
+        return view('tasks.show', [
+            'task' => $task,
+            'labels' => $task->labels,
+        ]);
     }
 
     public function edit(Task $task): View

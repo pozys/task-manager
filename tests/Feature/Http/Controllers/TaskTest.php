@@ -28,6 +28,21 @@ class TaskTest extends ControllerTestCase
         $response->assertSee(__('task.index.actions'));
     }
 
+    public function testShow(): void
+    {
+        $task = $this->createTask(2);
+
+        $response = $this->get(route('tasks.show', compact('task')));
+        $response->assertOk();
+        $response->assertSee($task->name);
+        $response->assertSee($task->description);
+        $response->assertSee($task->status->name);
+
+        foreach ($task->labels as $label) {
+            $response->assertSee($label->name);
+        }
+    }
+
     public function testCreate(): void
     {
         $response = $this->get(route('tasks.create'));
@@ -116,8 +131,6 @@ class TaskTest extends ControllerTestCase
     {
         return Task::factory()
             ->hasLabels($labelsCount)
-            ->create([
-                'created_by_id' => $this->user->id,
-            ]);
+            ->create();
     }
 }
