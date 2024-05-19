@@ -5,7 +5,7 @@ return [
         'name' => 'Менеджер задач',
         'login' => 'Вход',
         'register' => 'Регистрация',
-        'logout' => 'Выйти',
+        'logout' => 'Выход',
         'menu' => [
             'tasks' => 'Задачи',
             'task_statuses' => 'Статусы',
