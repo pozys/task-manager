@@ -28,7 +28,7 @@ class TaskRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'labels' => Arr::whereNotNull($this->labels)
+            'labels' => Arr::whereNotNull($this->labels ?? [])
         ]);
     }
 }
